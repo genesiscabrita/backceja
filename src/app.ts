@@ -8,7 +8,6 @@ import { date_get } from "./routes/date/dateGet";
 import { date_list } from "./routes/date/dateList";
 import auth0Verify from "fastify-auth0-verify";
 import { mail_plugin } from "./email/mail.plugin";
-import { sedMsg } from "./whatsapp/whatsapp.plugin";
 
 const date_plugin: FastifyPluginAsync = async (app) => {
     app.register(date_list);
@@ -33,7 +32,6 @@ export const app: FastifyPluginAsync = async (app) => {
         domain: "dev-14agzilrb400bgs2.us.auth0.com",
         audience: "admin",
     });
-    app.register(sedMsg)
     app.register(mail);
     app.register(db_plugin);
     app.register(fastifyCors);

@@ -1,6 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
 import { BadRequest } from "http-errors";
-import { ACCOUNT_SID, AUTH_TOKEN } from "../../config";
 import { gmail_transporter } from "../../email/mail.plugin";
 import { DateModel } from "../../model/date.model";
 import { isEmpty } from "../../util/is_empty";
@@ -81,45 +80,35 @@ export const date_create: FastifyPluginAsync = async (app) => {
             , Si necesitas reprogramarla, llamarnos lo antes posible. Por favor, ser puntual y estar 10 minutos antes. Gracias por preferirnos y ¡Espero verte pronto!</p></div>`
         }) : null}
 
-        console.log("mensaje enviado");
-        const accountSid = ACCOUNT_SID;
-        const authToken = AUTH_TOKEN;
-        const client = require('twilio')(accountSid, authToken);
+        {doc.tipoCita === 'Ciudadela' ?
+            await gmail_transporter.sendMail({
+            from: '"Tienes una cita Genesis👻" <genesisdcabritar@gmail.com>',
+            to: 'genesisdcabritar@gmail.com', 
+            subject: `${doc?.name}, pidio una cita ✔`,
+            html:`<div></div><div><p>hola!</p><b style="color:#9c6419">Genesis
+            </b><p>Tienes una cita pautada con ${doc?.name}. para el día ${doc?.fecha} a las ${doc?.hora} 
+            se atenderá en la ${doc?.tipoCita} El servicio que se quiere realizar es ${doc?.servicio}
+            y la totalidad tiene un monto de ${doc?.monto}$ . Por favor estar atenta.
+            Mas detalles del servicio entra en este link:
+            https://frontgenesis.vercel.app/manage/citas-genesis</p></div>`
+        })
+        : null}
 
-        {doc.tipoCita === 'Ciudadela' ? 
-        await client.messages
-        .create({
-            body: `Tienes una cita pautada con ${doc?.name}
-                    para el día ${doc?.fecha} a las ${doc?.hora} 
-                    se atenderá en la ${doc?.tipoCita}  
-                    El servicio que se quiere realizar es ${doc?.servicio}
-                    y la totalidad tiene un monto de ${doc?.monto}$
-                    , cualquier novedad llama al ${doc?.cell}
-                    . Por favor estar atenta.
-                    Mas detalles del servicio entra en este link:
-                    https://frontgenesis.vercel.app/manage/citas-genesis`,
-            from: 'whatsapp:+14155238886',
-            to: `whatsapp:+584124953318`
-        }).then((message: any) => console.log(message.sid))
-        .done() : null}
+        {doc.tipoCita === 'A domicilio' ?
+            await gmail_transporter.sendMail({
+            from: '"Tienes una cita Genesis👻" <genesisdcabritar@gmail.com>',
+            to: 'genesisdcabritar@gmail.com', 
+            subject: `${doc?.name}, pidio una cita ✔`,
+            html:`<div></div><div><p>hola!</p><b style="color:#9c6419">Genesis
+            </b><p>Tienes una cita pautada con ${doc?.name}. para el día ${doc?.fecha} a las ${doc?.hora} 
+            se atenderá en ${doc?.direccion} El servicio que se quiere realizar es ${doc?.servicio}
+            y la totalidad tiene un monto de ${doc?.monto}$ . Por favor estar atenta.
+            Mas detalles del servicio entra en este link:
+            https://frontgenesis.vercel.app/manage/citas-genesis</p></div>`
+        })
+        : null}
 
-        {doc.tipoCita === 'A domicilio' ? 
-        await client.messages
-        .create({
-            body: `Tienes una cita pautada con ${doc?.name}
-                    para el día ${doc?.fecha} a las ${doc?.hora} 
-                    se atenderá en ${doc?.direccion}  
-                    El servicio que se quiere realizar es ${doc?.servicio}
-                    y la totalidad tiene un monto de ${doc?.monto}$
-                    , cualquier novedad llama al ${doc?.cell}
-                    . Por favor estar atenta.
-                    Mas detalles del servicio entra en este link:
-                    https://frontgenesis.vercel.app/manage/citas-genesis`,
-            from: 'whatsapp:+14155238886',
-            to: `whatsapp:+584124953318`
-        }).then((message: any) => console.log(message.sid))
-        .done() : null}
-        
+        console.log("mensajes enviado");
 
         return doc;
     });
