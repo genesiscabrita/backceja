@@ -17,22 +17,22 @@ const date_plugin: FastifyPluginAsync = async (app) => {
     app.register(date_Edit);
 };
 
-const mail:FastifyPluginAsync = async (app) =>{
-    app.register(mail_plugin);
-    app.get("/email", async () => {
-    app.mail("genesisdcabritar@gmail.com");
-        return {
-        sent: "OK",
-        };
-    });
-}
+// const mail:FastifyPluginAsync = async (app) =>{
+//     app.register(mail_plugin);
+//     app.get("/email", async () => {
+//     app.mail("genesisdcabritar@gmail.com");
+//         return {
+//         sent: "OK",
+//         };
+//     });
+// }
 
 export const app: FastifyPluginAsync = async (app) => {
     await app.register(auth0Verify, {
         domain: "dev-14agzilrb400bgs2.us.auth0.com",
         audience: "admin",
     });
-    app.register(mail);
+    // app.register(mail);
     app.register(db_plugin);
     app.register(fastifyCors);
     app.register(date_plugin, { prefix: "/date" });

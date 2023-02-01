@@ -11,7 +11,7 @@ const checkEnv = (enVar: string) => {
 
 export const MONGODB = checkEnv("MONGODB");
 export const PORT = checkEnv("PORT");
-export const CLIENT_ID = checkEnv('CLIENT_ID');
-export const CLIENT_SECRET = checkEnv('CLIENT_SECRET');
-export const REFRESH_TOKEN = checkEnv('REFRESH_TOKEN');
-export const ACCESS_TOKEN = checkEnv('ACCESS_TOKEN');
+// export const CLIENT_ID = checkEnv('CLIENT_ID');
+// export const CLIENT_SECRET = checkEnv('CLIENT_SECRET');
+// export const REFRESH_TOKEN = checkEnv('REFRESH_TOKEN');
+// export const ACCESS_TOKEN = checkEnv('ACCESS_TOKEN');
